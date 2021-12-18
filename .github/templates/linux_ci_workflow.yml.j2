@@ -49,6 +49,7 @@ jobs:
       AWS_DEFAULT_REGION: us-east-1
       PR_NUMBER: ${{ github.event.pull_request.number }}
       SHA1: ${{ github.event.pull_request.head.sha || github.sha }}
+      PYTORCH_RETRY_TEST_CASES: 1
     {%- if build_with_debug %}
       DEBUG: 1
     {%- endif %}
@@ -144,7 +145,6 @@ jobs:
     needs: [!{{ ciflow_config.root_job_name }}]
     timeout-minutes: !{{ common.timeout_minutes }}
     env:
-      BUILD_ENVIRONMENT: !{{ build_environment }}
       TEST_RUNNER_TYPE: !{{ test_runner_type }}
       ENABLE_DISTRIBUTED_TEST: !{{ enable_distributed_test }}
       ENABLE_JIT_LEGACY_TEST: !{{ enable_jit_legacy_test }}
@@ -183,6 +183,7 @@ jobs:
       fail-fast: false
     runs-on: ${{ matrix.runner }}
     timeout-minutes: !{{ common.timeout_minutes }}
+    env:
     env:
       BUILD_ENVIRONMENT: !{{ build_environment }}
       DOCKER_IMAGE_BASE: !{{ docker_image_base }}
